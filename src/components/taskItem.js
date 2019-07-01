@@ -1,20 +1,21 @@
 import React, {Component} from 'react';
 import '../App.css';
 import { Button } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import * as actions from './../actions/index';
 
 class TaskItem extends Component{
   showStatus(){
     return (
       <span className={this.props.task.status === true ? "label label-danger" : "label label-success"}
             onClick={this.changeStatus}>
-        {this.props.task.status === true ? 'Quang trọng' : 'Không quan trọng'}
+        {this.props.task.status === true ? 'Quan trọng' : 'Không quan trọng'}
       </span>
     );
   }
 
   changeStatus = () => {
-    this.props.task.status = !this.props.task.status;
-    this.props.changeStatus(this.props.task);
+    this.props.changeStatus(this.props.task.id);
   }
 
   deleteTask = () => {
@@ -47,4 +48,19 @@ class TaskItem extends Component{
   };
 }
 
-export default TaskItem;
+const mapStateToProps = state => {
+  return state;
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    changeStatus: (id) => {
+      dispatch(actions.changeStatus(id));
+    },
+    deleteTask: (id) => {
+      dispatch(actions.deleteTask(id));
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskItem);

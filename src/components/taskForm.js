@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Form, Button} from 'react-bootstrap';
 import '../App.css';
+import { connect } from 'react-redux';
+import * as actions from './../actions/index';
 
 class TaskForm extends Component{
   constructor(props){
@@ -46,7 +48,9 @@ class TaskForm extends Component{
 
   onHandleSubmit = (event) => {
     event.preventDefault();
-    this.props.onSubmit(this.state);
+    this.props.onAddTask(this.state);
+    this.onCloseForm();
+    this.onClear();
   }
 
   onChange = (event) => {
@@ -65,6 +69,10 @@ class TaskForm extends Component{
     });
   }
 
+  onCloseForm = () => {
+    this.props.onCloseForm();
+  }
+
   generateId(){
     var randomString = require('random-string');
     return randomString({length: 20})+'-'+randomString({length: 20})+'-'+randomString({length: 20})+'-'+randomString({length: 20});
@@ -75,7 +83,7 @@ class TaskForm extends Component{
         <div className="panel-heading">
           <h3 className="panel-title">
             {this.props.task === null ? 'Thêm công việc' : 'Cập nhật công việc'}
-            <span className="fa fa-times-circle text-right" onClick={this.isDisplayForm}></span>
+            <span className="fa fa-times-circle text-right" onClick={this.onCloseForm}></span>
           </h3>
         </div>
         <div className="panel-body">
@@ -116,4 +124,21 @@ class TaskForm extends Component{
   };
 }
 
-export default TaskForm;
+const mapStateToProps = (state) => {//chuyen state tren store thanh props
+  return {
+    
+  };
+};
+
+const mapDispatchToProps = (dispatch, props) => {//chuyen dispatch thanh props de thuc thi 1 action
+  return{
+    onAddTask: (task) => {
+      dispatch(actions.addTask(task));
+    },
+    onCloseForm: () => {
+      dispatch(actions.closeForm());
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskForm);//tham so thu 2 la action

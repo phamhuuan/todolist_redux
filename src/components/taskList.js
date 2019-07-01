@@ -1,19 +1,16 @@
-import React, {Component} from 'react';
-import {Table, Form} from 'react-bootstrap';
+import React, { Component } from 'react';
+import { Table, Form } from 'react-bootstrap';
 import '../App.css';
 import TaskItem from './taskItem';
+import { connect } from 'react-redux';
 
-class TaskList extends Component{
-  constructor(props){
+class TaskList extends Component {
+  constructor(props) {
     super(props);
     this.state = {
       filterName: '',
       filterStatus: -1
     }
-  }
-
-  changeStatus = (task) => {
-    this.props.changeStatus(task);
   }
 
   deleteTask = (task) => {
@@ -36,16 +33,15 @@ class TaskList extends Component{
       [name]: value,
     });
   }
-  render(){
-    var {tasks} = this.props;//var tasks = this.props.task;
-    var {filterName, filterStatus} = this.state;
+  render() {
+    var { tasks } = this.props;//var tasks = this.props.task;
+    var { filterName, filterStatus } = this.state;
     var elementTask = tasks.map((task, index) => {
-      return <TaskItem  key={task.id} 
-                        index={index} 
-                        task={task} 
-                        changeStatus={this.changeStatus} 
-                        deleteTask={this.deleteTask}
-                        editTask={this.editTask}/>
+      return <TaskItem 
+        key={task.id}
+        index={index}
+        task={task}
+        editTask={this.editTask} />
     });
     return (
       <Table className="mt-10" striped bordered hover>
@@ -79,4 +75,8 @@ class TaskList extends Component{
   };
 }
 
-export default TaskList;
+const mapStateToProps = (state) => {
+  return state;
+};
+
+export default connect(mapStateToProps, null)(TaskList);
