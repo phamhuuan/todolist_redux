@@ -6,6 +6,7 @@ import TaskControl from './components/taskControl';
 import TaskList from './components/taskList';
 // import _ from 'lodash';//lam nhu the nay se import ca thu vien rat nang
 import {findIndex, filter} from 'lodash';
+import demo from './training/demo2';
 
 class App extends Component{
   constructor(props){

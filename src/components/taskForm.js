@@ -94,7 +94,7 @@ class TaskForm extends Component{
                             name="status"
                             value={this.state.status}
                             onChange={this.onChange}>
-                <option value={true}>Quang trọng</option>
+                <option value={true}>Quan trọng</option>
                 <option value={false}>Không quan trọng</option>
               </Form.Control>
               <br/>
