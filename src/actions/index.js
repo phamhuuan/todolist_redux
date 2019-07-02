@@ -42,3 +42,38 @@ export const deleteTask = (id) => {
     id,
   }
 }
+
+export const editTask = (task) => {
+  return{
+    type: types.EDIT_TASK,
+    task,
+  }
+}
+
+export const saveTask = (task) => {
+  return{
+    type: types.SAVE_TASK,
+    task,
+  }
+}
+
+export const filterTask = (filter) => {
+  return{
+    type: types.FILTER_TASK,
+    filter,
+  }
+}
+
+export const searchTask = (keyword) => {
+  return{
+    type: types.SEARCH_TASK,
+    keyword,
+  }
+}
+
+export const sortTask = (sort) => {
+  return{
+    type: types.SORT_TASK,
+    sort,
+  }
+}

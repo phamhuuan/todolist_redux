@@ -3,6 +3,8 @@ import { Table, Form } from 'react-bootstrap';
 import '../App.css';
 import TaskItem from './taskItem';
 import { connect } from 'react-redux';
+import * as actions from './../actions/index';
+import { filter, reverse, sortBy } from 'lodash';
 
 class TaskList extends Component {
   constructor(props) {
@@ -13,35 +15,50 @@ class TaskList extends Component {
     }
   }
 
-  deleteTask = (task) => {
-    this.props.deleteTask(task);
-  }
-
-  editTask = (task) => {
-    this.props.editTask(task);
-  }
-
   onChange = (event) => {
     var target = event.target;
     var name = target.name;
     var value = target.value;
-    this.props.onFilter(
-      name === 'filterName' ? value : this.state.filterName,
-      name === 'filterStatus' ? value : this.state.filterStatus
-    );
+    var filter = {
+      name: name === 'filterName' ? value : this.state.filterName,
+      status: name === 'filterStatus' ? value : this.state.filterStatus
+    }
+    this.props.onFilter(filter);
     this.setState({
       [name]: value,
     });
   }
   render() {
-    var { tasks } = this.props;//var tasks = this.props.task;
+    var { tasks, filterTask, searchTask, sortTask } = this.props;//var tasks = this.props.task;
     var { filterName, filterStatus } = this.state;
+    //filter
+    if (filterTask.name) {
+      tasks = filter(tasks, (task) => {
+        return task.name.toLowerCase().indexOf(filterTask.name.toLowerCase()) !== -1;
+      });
+    }
+    tasks = filter(tasks, (task) => {
+      if (filterTask.status === -1) return task;
+      else return task.status === (filterTask.status === 1 ? false : true);
+    });
+    //search
+    tasks = filter(tasks, (task) => {
+      return task.name.toLowerCase().indexOf(searchTask.toLowerCase()) !== -1;
+    });
+    //sort
+    if (sortTask.by === 'name') {
+      tasks = sortBy(tasks, ['name', 'status']);
+      if(sortTask.value === -1) tasks = reverse(tasks);
+    }
+    else {
+      tasks = sortBy(tasks, ['status', 'value']);
+      if(sortTask.value === 1) tasks = reverse(tasks);
+    }
     var elementTask = tasks.map((task, index) => {
-      return <TaskItem 
+      return <TaskItem
         key={task.id}
         index={index}
-        task={task}
-        editTask={this.editTask} />
+        task={task} />
     });
     return (
       <Table className="mt-10" striped bordered hover>
@@ -62,7 +79,7 @@ class TaskList extends Component {
             <td width='20%'>
               <Form.Control as="select" name="filterStatus" value={filterStatus} onChange={this.onChange}>
                 <option value={-1}>Tất cả</option>
-                <option value={0} >Quang trọng</option>
+                <option value={0} >Quan trọng</option>
                 <option value={1} >Không quan trọng</option>
               </Form.Control>
             </td>
@@ -79,4 +96,12 @@ const mapStateToProps = (state) => {
   return state;
 };
 
-export default connect(mapStateToProps, null)(TaskList);
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onFilter: (filter) => {
+      dispatch(actions.filterTask(filter));
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskList);

@@ -1,6 +1,6 @@
 {
   "name": "todolist_redux",
-  "version": "0.1.0",
+  "version": "19.07.03",
   "private": true,
   "dependencies": {
     "bootstrap": "^4.3.1",

@@ -8,9 +8,6 @@ class TaskForm extends Component{
   constructor(props){
     super(props);
     this.state = {
-      // id: this.props.task === null ? '' : this.props.task.id,
-      // name: this.props.task === null ? '' : this.props.task.name,
-      // status: this.props.task === null ? true : this.props.task.status,
       id: '',
       name: '',
       status: true,
@@ -18,11 +15,11 @@ class TaskForm extends Component{
   }
 
   componentWillMount(){
-    if(this.props.task && this.props.task.id !== null){
+    if(this.props.editTask && this.props.editTask.id !== null){
       this.setState({
-        id: this.props.task.id,
-        name: this.props.task.name,
-        status: this.props.task.status
+        id: this.props.editTask.id,
+        name: this.props.editTask.name,
+        status: this.props.editTask.status
       });
     }else{
       this.onClear();
@@ -30,25 +27,20 @@ class TaskForm extends Component{
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps && nextProps.task){
+    if(nextProps && nextProps.editTask){
       this.setState({
-        id : nextProps.task.id,
-        name : nextProps.task.name,
-        status : nextProps.task.status
+        id: nextProps.editTask.id,
+        name: nextProps.editTask.name,
+        status: nextProps.editTask.status
       });
     }else{
       this.onClear();
     }
-    console.log('componentWillReceiveProps');
-  }
-
-  isDisplayForm = () => {
-    this.props.onReceiveDisplayForm();
   }
 
   onHandleSubmit = (event) => {
     event.preventDefault();
-    this.props.onAddTask(this.state);
+    this.state.id === '' ? this.props.onAddTask(this.state) : this.props.onSaveTask(this.state);
     this.onCloseForm();
     this.onClear();
   }
@@ -73,16 +65,13 @@ class TaskForm extends Component{
     this.props.onCloseForm();
   }
 
-  generateId(){
-    var randomString = require('random-string');
-    return randomString({length: 20})+'-'+randomString({length: 20})+'-'+randomString({length: 20})+'-'+randomString({length: 20});
-  }
   render(){
+    if(this.props.displayForm === false) return '';//return null
     return (
       <div className="panel panel-warning">
         <div className="panel-heading">
           <h3 className="panel-title">
-            {this.props.task === null ? 'Thêm công việc' : 'Cập nhật công việc'}
+            {!this.state.id ? 'Thêm công việc' : 'Cập nhật công việc'}
             <span className="fa fa-times-circle text-right" onClick={this.onCloseForm}></span>
           </h3>
         </div>
@@ -125,9 +114,7 @@ class TaskForm extends Component{
 }
 
 const mapStateToProps = (state) => {//chuyen state tren store thanh props
-  return {
-    
-  };
+  return state;
 };
 
 const mapDispatchToProps = (dispatch, props) => {//chuyen dispatch thanh props de thuc thi 1 action
@@ -137,7 +124,10 @@ const mapDispatchToProps = (dispatch, props) => {//chuyen dispatch thanh props d
     },
     onCloseForm: () => {
       dispatch(actions.closeForm());
-    }
+    },
+    onSaveTask: (task) => {
+      dispatch(actions.saveTask(task));
+    },
   };
 };
 

@@ -1,19 +1,24 @@
 import React, {Component} from 'react';
 import {Col} from 'react-bootstrap';
 import '../App.css';
+import { connect } from 'react-redux';
+import * as actions from './../actions/index';
 
 class TaskControlSort extends Component{
   constructor(props){
     super(props);
     this.state = {
-      value: 0
+      value: 0,
     }
   }
   onClick = (sortBy, sortValue, value) => {
     this.setState({
-      value: value,
+      value
     });
-    this.props.onSort(sortBy, sortValue);
+    this.props.onSort({
+      by: sortBy,
+      value: sortValue
+    });
   }
   render(){
     var {value} = this.state;
@@ -50,7 +55,7 @@ class TaskControlSort extends Component{
             <li onClick={() => this.onClick('status', 1, 2)}>
               {/* eslint-disable-next-line */}
               <a role="button" className={value === 2 ? 'sort-selected' : ''}>
-                Quang trọng
+                Quan trọng
               </a>
             </li>
             <li onClick={() => this.onClick('status', -1, 3)}>
@@ -66,4 +71,16 @@ class TaskControlSort extends Component{
   };
 }
 
-export default TaskControlSort;
+const mapStateToProps = (state) => {
+  return state;
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onSort: (sort) => {
+      dispatch(actions.sortTask(sort));
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskControlSort);

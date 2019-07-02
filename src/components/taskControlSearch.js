@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Col, Form, Button} from 'react-bootstrap';
 import '../App.css';
+import { connect } from 'react-redux';
+import * as actions from './../actions/index';
 
 class TaskControlSearch extends Component{
   constructor(props){
@@ -44,4 +46,16 @@ class TaskControlSearch extends Component{
   };
 }
 
-export default TaskControlSearch;
+const mapStateToProps = (state) => {
+  return state;
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onSearch: (filter) => {
+      dispatch(actions.searchTask(filter));
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskControlSearch);

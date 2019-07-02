@@ -19,19 +19,20 @@ class TaskItem extends Component{
   }
 
   deleteTask = () => {
-    this.props.deleteTask(this.props.task);
+    this.props.deleteTask(this.props.task.id);
+    this.props.onCloseForm();
   }
 
   editTask = () => {
+    this.props.onOpenForm();
     this.props.editTask(this.props.task);
   }
 
   render(){
-    var {task, index} = this.props;
     return (
       <tr>
-        <td>{index+1}</td>
-        <td>{task.name}</td>
+        <td>{this.props.index+1}</td>
+        <td>{this.props.task.name}</td>
         <td className="text-center"> 
           {this.showStatus()}
         </td>
@@ -60,6 +61,15 @@ const mapDispatchToProps = (dispatch, props) => {
     deleteTask: (id) => {
       dispatch(actions.deleteTask(id));
     },
+    onCloseForm: () => {
+      dispatch(actions.closeForm());
+    },
+    onOpenForm: () => {
+      dispatch(actions.openForm());
+    },
+    editTask: (task) => {
+      dispatch(actions.editTask(task));
+    }
   };
 }
 
