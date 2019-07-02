@@ -8,21 +8,6 @@ import { connect } from 'react-redux';
 import * as actions from './actions/index';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      filterShow: {
-        name: '',
-        status: -1,
-        nameSearch: '',
-      },
-      sort: {
-        by: 'name',
-        value: 1,
-      }
-    };
-  }
-
   onToggleForm = () => {
     var { editTask } = this.props;
     if (editTask && editTask.id !== '') { this.props.onOpenForm(); console.log(editTask.id); }
@@ -31,38 +16,6 @@ class App extends Component {
       id: '',
       name: '',
       status: true
-    });
-  }
-
-  onSearch = (nameSearch) => {
-    this.setState({
-      filterShow: {
-        name: this.state.filterShow.name,
-        status: this.state.filterShow.status,
-        nameSearch: nameSearch.toLowerCase(),
-      },
-    }, () => { console.log(this.state.filterShow); });
-  }
-
-  onSort = (sortBy, sortValue) => {
-    var tasks = this.state.tasks;
-    console.log(sortBy, sortValue);
-    if (sortBy === 'name') {
-      tasks.sort((a, b) => {
-        if (a.name > b.name) return sortValue;
-        else if (a.name < b.name) return -sortValue;
-        return 0;
-      });
-    }
-    else if (sortBy === 'status') {
-      tasks.sort((a, b) => {
-        if (a.status > b.status) return -sortValue;
-        else if (a.status < b.status) return sortValue;
-        return 0;
-      })
-    }
-    this.setState({
-      tasks: tasks
     });
   }
 
